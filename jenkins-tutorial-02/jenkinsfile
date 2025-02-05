@@ -24,11 +24,14 @@ pipeline {
                 fi
                 '''
             }
+            }
         }
 
         stage('Build Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$TAG jenkins-tutorial-02'
+                dir('jenkins-tutorial-02') {   // Fix: Change working directory
+                    sh 'docker build -t $IMAGE_NAME:$TAG .'
+                }
             }
         }
 
