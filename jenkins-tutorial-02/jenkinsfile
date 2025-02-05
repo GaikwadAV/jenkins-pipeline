@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "nginximg"
+        TAG = "v1"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/GaikwadAV/jenkins-pipeline.git'
+            }
+        }
+
+        stage('Install Docker') {
+            steps {
+                sh '''
+                if ! command -v docker &> /dev/null
+                then
+                    yum install docker -y
+                    systemctl start docker
+                    systemctl enable docker
+                fi
+                '''
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME:$TAG jenkins-tutorial-02'
+            }
+        }
+
+        stage('Create Container') {
+            steps {
+                sh 'docker run -d -p 8080:80 --name nginx_container $IMAGE_NAME:$TAG'
+            }
+        }
+    }
+}
+
