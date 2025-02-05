@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-RUN yum -y update && yum -y install nginx
+RUN apt-get -y update && apt-get -y install nginx
 
 COPY index.html /var/www/html/index.nginx-debian.html
 
