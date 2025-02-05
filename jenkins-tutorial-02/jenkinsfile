@@ -37,7 +37,7 @@ pipeline {
 
     stage('Create Container') {
         steps {
-            sh 'docker run -d -p 8080:80 --name nginx_container $IMAGE_NAME:$TAG'
+            sh 'docker run -d -p 80:80 --name nginx_container $IMAGE_NAME:$TAG'
             }
         }
     } 
