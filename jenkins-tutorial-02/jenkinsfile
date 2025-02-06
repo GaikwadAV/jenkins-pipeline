@@ -37,23 +37,23 @@ pipeline {
     }
 
     stage('create container') {
-        steps{
-            script {
-                    CONTAINER_ID = sh(script: 'docker run -d -p 80:80 --name nginx_container $IMAGE_NAME:$TAG"')
-                    echo "Container ID: ${CONTAINER_ID}"
-                }
+    steps {
+        script {
+            CONTAINER_ID = sh(script: 'docker run -d -p 80:80 --name nginx_container $IMAGE_NAME:$TAG', returnStdout: true).trim()
+            echo "Container ID: ${CONTAINER_ID}"
         }
     }
+}
     stage('destroy container') {
-        steps{
-            script{
-                sh 'sleep 3m'
-                sh "docker stop ${CONTAINER_ID}"
-                sh "docker rm ${CONTAINER_ID}"
-            }
-
+    steps {
+        script {
+            sh 'sleep 3m'
+            sh "docker stop ${CONTAINER_ID} || true"
+            sh "docker rm -f ${CONTAINER_ID}"
         }
     }
+}
+
     } 
 
 } 
